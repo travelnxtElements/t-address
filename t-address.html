@@ -1,11 +1,8 @@
 ﻿<!-- We are still creating this components -->
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../t-input/t-input.html" />
-<link rel="import" href="../t-checkbox/t-checkbox.html" />
-<link rel="import" href="../t-button/t-button.html" />
-<link rel="import" href="../t-notify/t-notify.html" />
 <link rel="import" href="../t-dropdown-menu/t-dropdown-menu.html" />
-<link rel="import" href="../iron-list/iron-list.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../t-creditcard/t-phone-input.html" />
 <!--
     `<t-address>` is a polymer component that generates a playground for interacting with components.
@@ -48,14 +45,14 @@
             }
         </style>
             <div class="vertical-margin">
-                <t-input auto-validate label="Address line 1" id="line1" name="line1" error-message="Enter address line 1" required></t-input>
+                <t-input auto-validate label="Address line 1" id="line1" name="line1" error-message="You missed this." required></t-input>
             </div>
             <div class="vertical-margin">
                 <t-input auto-validate id="line2" name="line2" label="Address line 2 (optional)"></t-input>
             </div>
             <div class="vertical-margin layout horizontal">
                 <div class="horizontal-margin flex">
-                    <t-dropdown-menu id="country" label="Country" selected-item-label="{{country}}" error-message="Select country" name="country" required>
+                    <t-dropdown-menu id="country" label="Country" selected-item-label="{{country}}" error-message="You missed this." name="country" required>
                         <paper-menu class="dropdown-content">
                             <template is="dom-repeat" items="{{countries.result}}">
                                 <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
@@ -65,7 +62,7 @@
                 </div>
                 <div class="flex">
                     <template is="dom-if" if="{{hasStates}}">
-                    <t-dropdown-menu label="State" id="state" name="state" required error-message="Select state">
+                    <t-dropdown-menu label="State" id="state" name="state" required error-message="You missed this.">
                         <paper-menu class="dropdown-content">
                             <template is="dom-repeat" items="{{states.result}}">
                                 <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
@@ -73,7 +70,7 @@
                         </paper-menu>
                     </t-dropdown-menu>
                         </template>
-                        <t-input label="State" id="state" name="state" required hidden$="{{hasStates}}" error-message="Enter state"></t-input>
+                        <t-input label="State" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
                 </div>
             </div>
             <div class="vertical-margin layout horizontal">
@@ -81,11 +78,11 @@
                     <t-input auto-validate id="city" name="city" label="City" error-message="Enter city" required ></t-input>
                 </div>
                 <div class="flex">
-                    <t-input id="zipCode" name="zipCode" label="Zip Code" max-length="50" auto-validate error-message="Enter zip code" required></t-input>
+                    <t-input id="zipCode" name="zipCode" label="Zip Code" max-length="50" auto-validate error-message="You missed this." required></t-input>
                 </div>
             </div>
             <div class="vertical-margin">
-                <t-phone-input id="phoneNumber" name="phoneNumber" error-message="Enter phone number" required auto-validate></t-phone-input>
+                <t-input name="phoneNumber" id="phoneNumber" label="Phone"  pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." required auto-validate ></t-input>
             </div>
         <iron-ajax id="countryCall"  method="GET" verbose content-type="application/json" last-response="{{countries}}"></iron-ajax>
         <iron-ajax id="statesCall" method="GET" verbose content-type="application/json" last-response="{{states}}"></iron-ajax>
@@ -98,12 +95,6 @@
 
         properties: {
 
-            statesApi: {
-                type: String,
-                value: "",
-                notify: true
-            },
-
             countryApi: {
                 type: String,
                 value: "",
@@ -111,12 +102,6 @@
             },
 
             baseGeoApi: {
-                type: String,
-                value: "",
-                notify: true
-            },
-
-            citiesApi: {
                 type: String,
                 value: "",
                 notify: true
@@ -153,7 +138,7 @@
 
         },
 
-        ready: function () {
+        attached: function () {
             this.$.countryCall.url = this.countryApi + this.queryParams;
             this.$.countryCall.generateRequest();
         },
