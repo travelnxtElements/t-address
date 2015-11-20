@@ -82,10 +82,10 @@
                 </div>
             </div>
             <div class="vertical-margin">
-                <t-input name="phoneNumber" id="phoneNumber" label="Phone"  pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." required auto-validate ></t-input>
+                <t-input name="phoneNumber" id="phoneNumber" label="Phone"  type="number" max-length="20" error-message="You missed this." required auto-validate ></t-input>
             </div>
-        <iron-ajax id="countryCall"  method="GET" verbose content-type="application/json" last-response="{{countries}}"></iron-ajax>
-        <iron-ajax id="statesCall" method="GET" verbose content-type="application/json" last-response="{{states}}"></iron-ajax>
+        <iron-ajax id="countryCall"  method="GET" verbose headers='{"accept": "application/json"}' handle-as="json" content-type="application/json" last-response="{{countries}}"></iron-ajax>
+        <iron-ajax id="statesCall" method="GET" verbose headers='{"accept": "application/json"}' handle-as="json" content-type="application/json" last-response="{{states}}"></iron-ajax>
     </template> 
 </dom-module>
 <script>
