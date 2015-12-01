@@ -140,8 +140,14 @@
         },
 
         attached: function () {
+            this.pullCountryList();
+        },
+
+        pullCountryList: function(){
+            if(this.countryApi && this.queryParams){
             this.$.countryCall.url = this.countryApi + this.queryParams;
             this.$.countryCall.generateRequest();
+            }
         },
 
         _countryChanged: function () {
