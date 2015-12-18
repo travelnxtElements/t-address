@@ -39,7 +39,13 @@
             .horizontal-margin {
                 padding-right: 5px;
             }
-
+            .countryContainer{
+                position: relative;
+            }
+            .overlayFix{
+                z-index: 100;
+                background: transparent;
+            }
             .section {
                 padding: 0 10px;
             }
@@ -51,8 +57,9 @@
                 <t-input auto-validate id="line2" name="line2" label="Address line 2 (optional)"></t-input>
             </div>
             <div class="vertical-margin layout horizontal">
-                <div class="horizontal-margin flex">
-                    <t-dropdown-menu id="country" label="Country" selected-item-label="{{country}}" error-message="You missed this." name="country" required>
+                <div class="horizontal-margin flex countryContainer">
+                    <div class="overlayFix fit" on-click="_patchIphone" hidden="[[countryOpen]]"></div>
+                    <t-dropdown-menu id="country" label="Country" opened="{{countryOpen}}" selected-item-label="{{country}}" error-message="You missed this." name="country" required>
                         <paper-menu class="dropdown-content">
                             <template is="dom-repeat" items="{{countries.result}}">
                                 <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
@@ -148,6 +155,14 @@
             this.$.countryCall.url = this.countryApi + this.queryParams;
             this.$.countryCall.generateRequest();
             }
+        },
+
+        //patch for Iphone ATOM-397
+        _patchIphone:function(){
+            var component = this;
+            setTimeout(function(){
+                component.$.country.open();
+            },100);
         },
 
         _countryChanged: function () {
