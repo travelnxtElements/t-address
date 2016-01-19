@@ -5,19 +5,34 @@
 <link rel="import" href="../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../t-creditcard/t-phone-input.html" />
 <!--
-    `<t-address>` is a polymer component that generates a playground for interacting with components.
+    `<t-address>` is a polymer component that generates a address form with country state combo.
+    t-address includes following fields.
 
-    <div class="demo-canvas">
-        
-    </div>
+        Address line 1,
 
-    <t-address metadata-source="metadata url" property-source="property url" component="component name">
-        
-        <div class="component">
-            
-            'component template'
-        </div>
-    </t-address>     
+        Address line 2,
+
+        Country and State,
+
+        City and Zip,
+
+        Phone Number
+
+
+    The `getAddress()` returns the entire address values in one object to use. Which looks like:
+    
+    `{
+    city: "sdas",
+    country: "US",
+    line1: "asa",
+    line2: "sasa",
+    phoneNumber: "54+95+92121",
+    state: "AS",
+    zipCode: "1212"
+    }`
+
+    Basic usage
+    `<t-address></t-address>`
 -->
 <dom-module id="t-address">
     <template>
@@ -103,23 +118,27 @@
 
         properties: {
 
+            /*Provide the country API to hit and populate the country list automatically*/
             countryApi: {
                 type: String,
                 value: "",
                 notify: true
             },
 
+            /*Provide the base API for country and state*/
             baseGeoApi: {
                 type: String,
                 value: "",
                 notify: true
             },
 
+            /*The object of the entire list of countries*/
             countries: {
                 type: Object,
                 value: null
             },
 
+            /*The object of the entire list of states*/
             states: {
                 type: Object,
                 value: function () { return null; },
@@ -128,17 +147,20 @@
 
             },
 
+            /*A boolean to find out whether the selected country has states*/
             hasStates: {
                 type: Boolean,
                 value:false
             },
 
+            /*The selected country from the dropdown*/
             country: {
                 type: String,
                 notify: true,
                 observer: '_countryChanged'
             },
 
+            /*The queryParam to pass token for country and state dropdown*/
             queryParams: {
                 type: String,
                 notify: true
@@ -150,6 +172,7 @@
             this.pullCountryList();
         },
 
+        /*The method to invoke the call for states*/
         pullCountryList: function(){
             if(this.countryApi && this.queryParams){
             this.$.countryCall.url = this.countryApi + this.queryParams;
@@ -180,6 +203,9 @@
                 this.hasStates = false;
         },
 
+        /*
+         * The method to validate all the fields of the component.
+         */
         validate: function () {
             var isValid = true;
             this.fields = this.querySelectorAll('[name]');
@@ -191,6 +217,9 @@
             return isValid;
         },
 
+        /*
+         * The most important method of the component this returns the entire address object which * include the address and phone number with country and state.
+         */
         getAddress: function () {
             var state = '';
             var stateElement = this.$$('#state');
