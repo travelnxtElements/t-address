@@ -3,6 +3,7 @@
 <link rel="import" href="../t-input/t-input.html" />
 <link rel="import" href="../t-dropdown-menu/t-dropdown-menu.html" />
 <link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
 <!--
     `<t-address>` is a polymer component that generates a address form with country state combo.
     t-address includes following fields.
@@ -35,7 +36,7 @@
 -->
 <dom-module id="t-address">
     <template>
-        <style>
+    <style include="iron-flex">
             :host {
                 width: 100%;
                 -webkit-box-sizing: border-box;
