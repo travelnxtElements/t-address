@@ -84,7 +84,7 @@
                 </div>
                 <div class="flex">
                     <template is="dom-if" if="{{hasStates}}">
-                    <t-dropdown-menu label="State" id="state" name="state" required error-message="You missed this.">
+                    <t-dropdown-menu label="State / Province" id="state" name="state" required error-message="You missed this.">
                         <paper-menu class="dropdown-content">
                             <template is="dom-repeat" items="{{states.result}}">
                                 <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
@@ -92,7 +92,7 @@
                         </paper-menu>
                     </t-dropdown-menu>
                         </template>
-                        <t-input label="State" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
+                        <t-input label="State / Province" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
                 </div>
             </div>
             <div class="vertical-margin layout horizontal">
