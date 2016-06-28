@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
-    "t-dropdown-menu": "atomelements/t-dropdown-menu#^1.0.0",
+    "t-dropdown": "atomelements/t-dropdown#^2.0.0",
     "t-input": "atomelements/t-input#^1.0.0",
     "polymer": "Polymer/polymer#^1.0.0"
   },

@@ -1,6 +1,6 @@
 ﻿<link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../t-input/t-input.html" />
-<link rel="import" href="../t-dropdown-menu/t-dropdown-menu.html">
+<link rel="import" href="../t-dropdown/t-dropdown.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <!--
@@ -72,10 +72,6 @@ The `getAddress()` returns the entire address values in one object to use. Which
             .countryContainer{
                 position: relative;
             }
-            .overlayFix{
-                z-index: 100;
-                background: transparent;
-            }
             .section {
                 padding: 0 10px;
             }
@@ -89,24 +85,34 @@ The `getAddress()` returns the entire address values in one object to use. Which
         </div>
         <div class="vertical-margin layout horizontal">
             <div class="horizontal-margin flex countryContainer">
-                <div class="overlayFix fit" on-click="_patchIphone" hidden="[[countryOpen]]"></div>
-                <t-dropdown-menu id="country" label="Country" opened="{{countryOpen}}" selected-item-label="{{country}}" error-message="You missed this." name="country" required>
-                    <paper-menu class="dropdown-content">
-                        <template is="dom-repeat" items="{{countries.result}}">
-                            <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
-                        </template>
-                    </paper-menu>
-                </t-dropdown-menu>
+                <t-dropdown 
+                    id="country" 
+                    label="Country" 
+                    dropdown-array="{{countries.result}}"
+                    selected-item="{{country}}" 
+                    error-message="You missed this." 
+                    name="country" 
+                    value-key="value"
+                    label-key="key"
+                    required>
+                    
+                </t-dropdown>
             </div>
             <div class="flex">
                 <template is="dom-if" if="{{hasStates}}">
-                    <t-dropdown-menu label="State / Province" id="state" name="state" required error-message="You missed this.">
-                        <paper-menu class="dropdown-content">
-                            <template is="dom-repeat" items="{{states.result}}">
-                                <paper-item data-code$="{{item.value}}">{{item.key}}</paper-item>
-                            </template>
-                        </paper-menu>
-                    </t-dropdown-menu>
+                    <t-dropdown 
+                    label="State / Province" 
+                    id="state-dropdown" 
+                    name="state"
+                    required 
+                    error-message="You missed this."
+                    dropdown-array="{{states.result}}"
+                    selected-item="{{state}}" 
+                    value-key="value"
+                    label-key="key"
+                    >
+                    
+                    </t-dropdown>
                 </template>
                 <t-input label="State / Province" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
             </div>
@@ -168,7 +174,8 @@ The `getAddress()` returns the entire address values in one object to use. Which
              */
             countries: {
                 type: Object,
-                value: null
+                value: null,
+                observer: '_countryPopulated'
             },
 
             /**
@@ -226,18 +233,14 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 this.$.countryCall.generateRequest();
             }
         },
-
-        //patch for Iphone ATOM-397
-        _patchIphone:function(){
-            var component = this;
-            setTimeout(function(){
-                component.$.country.open();
-            },100);
+        _countryPopulated: function(){
+            var select = this.$.country.querySelector('select');
+            select.selectedIndex = -1;
         },
 
         _countryChanged: function () {
             if (this.country !== undefined) {
-                var countryCode = this.$.country.selectedItem.getAttribute('data-code');
+                var countryCode = this.$.country.selectedItem;
                 this.$.statesCall.url = this.baseGeoApi + "/" + countryCode + "/states" + this.queryParams;
                 this.$.statesCall.generateRequest();
             }
@@ -278,17 +281,17 @@ The `getAddress()` returns the entire address values in one object to use. Which
             var state = '';
             var stateElement = this.$$('#state');
 
-            if (stateElement.is == 't-input')
+            if (!this.hasStates)
                 state = stateElement.value;
             else
-                state = stateElement.selectedItem.getAttribute('data-code');
+                state = this.state;
 
             var address = {
                 "line1": this.$.line1.value,
                 "line2": this.$.line2.value,
                 "city": this.$.city.value,
                 "state": state,
-                "country": this.$.country.selectedItem.getAttribute('data-code'),
+                "country": this.country,
                 "zipCode": this.$.zipCode.value,
                 "phoneNumber": this.$.phoneNumber.value
             };
