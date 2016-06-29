@@ -239,7 +239,7 @@ The `getAddress()` returns the entire address values in one object to use. Which
         },
 
         _countryChanged: function () {
-            if (this.country !== undefined) {
+            if (this.country) {
                 var countryCode = this.$.country.selectedItem;
                 this.$.statesCall.url = this.baseGeoApi + "/" + countryCode + "/states" + this.queryParams;
                 this.$.statesCall.generateRequest();
