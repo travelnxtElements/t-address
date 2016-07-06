@@ -141,6 +141,15 @@ The `getAddress()` returns the entire address values in one object to use. Which
         properties: {
 
             /**
+             * Flag to hit country API when component is attached to DOM
+             * @type {Boolean}
+             */
+            preventAutoPopulate: {
+                type: Boolean,
+                value: false,
+            },
+
+            /**
              * The url to hit to get the list of countries.
              * Eg.
              * http://demo.travelnxt.com/api/Content/countries
@@ -223,7 +232,9 @@ The `getAddress()` returns the entire address values in one object to use. Which
         },
 
         attached: function () {
-            this.pullCountryList();
+            if (!this.preventAutoPopulate) {
+                this.pullCountryList();
+            }
         },
 
         /*The method to invoke the call for states*/
