@@ -3,6 +3,7 @@
 <link rel="import" href="../t-dropdown/t-dropdown.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
 <!--
 The `t-address` is a form component for getting the address as input from the
 user. Below is the format of the address used by this component. User can
@@ -51,7 +52,8 @@ The `getAddress()` returns the entire address values in one object to use. Which
 -->
 <dom-module id="t-address">
     <template>
-        <style include="iron-flex">
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
             :host {
                 width: 100%;
                 -webkit-box-sizing: border-box;
@@ -62,28 +64,21 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 padding: 0 10px;
             }
 
-            .vertical-margin {
-                margin-bottom: 10px;
-            }
-
             .horizontal-margin {
-                padding-right: 5px;
-            }
-            .countryContainer{
-                position: relative;
+                margin-right: var(--normal-spacing,10px);
             }
             .section {
                 padding: 0 10px;
             }
         </style>
 
-        <div class="vertical-margin">
+        <div class="margin-bottom-medium">
             <t-input auto-validate label="Address line 1" id="line1" name="line1" error-message="You missed this." required></t-input>
         </div>
-        <div class="vertical-margin">
+        <div class="margin-bottom-medium">
             <t-input auto-validate id="line2" name="line2" label="Address line 2 (optional)"></t-input>
         </div>
-        <div class="vertical-margin layout horizontal">
+        <div class="margin-bottom-medium layout horizontal">
             <div class="horizontal-margin flex countryContainer">
                 <t-dropdown 
                     id="country" 
@@ -117,7 +112,7 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 <t-input label="State / Province" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
             </div>
         </div>
-        <div class="vertical-margin layout horizontal">
+        <div class="margin-bottom-medium layout horizontal">
             <div class="horizontal-margin flex">
                 <t-input auto-validate id="city" name="city" label="City" error-message="Enter city" required ></t-input>
             </div>
@@ -125,7 +120,7 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 <t-input id="zipCode" name="zipCode" label="Zip Code" max-length="50" auto-validate error-message="You missed this." required></t-input>
             </div>
         </div>
-        <div class="vertical-margin">
+        <div class="margin-bottom-medium">
             <t-input id="phoneNumber" name="phoneNumber" label="Phone" pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." required auto-validate></t-input>
         </div>
 
