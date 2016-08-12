@@ -215,6 +215,14 @@ The `getAddress()` returns the entire address values in one object to use. Which
             },
 
             /**
+             * Pass a country code to pre select a country from the dropdown.
+             * @type {String}
+             */
+            preselectCountry: {
+                type: String
+            },
+
+            /**
              * The query parameters to be used while making state and country
              * api calls.
              * @type {String}
@@ -240,8 +248,12 @@ The `getAddress()` returns the entire address values in one object to use. Which
             }
         },
         _countryPopulated: function(){
-            var select = this.$.country.querySelector('select');
-            select.selectedIndex = -1;
+            if (this.preselectCountry) {
+                this.$.country.selectedItem = this.preselectCountry;
+            }else{
+                var select = this.$.country.querySelector('select');
+                select.selectedIndex = -1;
+            }
         },
 
         _countryChanged: function () {
