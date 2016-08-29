@@ -241,12 +241,15 @@ The `getAddress()` returns the entire address values in one object to use. Which
         },
 
         /*The method to invoke the call for states*/
-        pullCountryList: function(){
-            if (this.countryApi && this.queryParams) {
-                this.$.countryCall.url = this.countryApi + this.queryParams;
-                this.$.countryCall.generateRequest();
+        pullCountryList: function () {
+            if (!this.countries || !this.countries.result || !this.countries.result.length) {
+                if (this.countryApi && this.queryParams) {
+                    this.$.countryCall.url = this.countryApi + this.queryParams;
+                    this.$.countryCall.generateRequest();
+                }
             }
         },
+
         _countryPopulated: function(){
             if (this.preselectCountry) {
                 this.$.country.selectedItem = this.preselectCountry;
