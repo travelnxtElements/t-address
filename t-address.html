@@ -10,6 +10,7 @@ user. Below is the format of the address used by this component. User can
 enter address lines 1 and 2. The country and state can be selected from a
 dropdown. The city, zip and phone number are entered directly by the user.
 
+
     Address line 1,
 
     Address line 2,
@@ -121,7 +122,10 @@ The `getAddress()` returns the entire address values in one object to use. Which
             </div>
         </div>
         <div class="margin-bottom-medium">
-            <t-input id="phoneNumber" name="phoneNumber" label="Phone" pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." required auto-validate></t-input>
+          <template is="dom-if" if=[[!hidePhoneNumber]]>
+            <t-input id="phoneNumber" name="phoneNumber" label="Phone" pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." 
+            required auto-validate></t-input>
+          </template>
         </div>
 
         <iron-ajax id="countryCall"  method="GET" verbose headers='{"accept": "application/json"}' handle-as="json" content-type="application/json" last-response="{{countries}}"></iron-ajax>
@@ -213,6 +217,17 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 notify: true,
                 observer: '_countryChanged'
             },
+            /**
+             * The property to hide/show phone numbers.
+             * @type {Boolean}
+             */
+            hidePhoneNumber: {
+                type: Boolean,
+                value: false,
+                reflectToAttribute: true,
+              
+            },
+
 
             /**
              * Pass a country code to pre select a country from the dropdown.
@@ -306,6 +321,11 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 state = stateElement.value;
             else
                 state = this.state;
+            var phoneNumber='';
+            if(!this.hidePhoneNumber){
+                phoneNumber=this.$.phoneNumber.value;
+            }
+          
 
             var address = {
                 "line1": this.$.line1.value,
@@ -314,7 +334,7 @@ The `getAddress()` returns the entire address values in one object to use. Which
                 "state": state,
                 "country": this.country,
                 "zipCode": this.$.zipCode.value,
-                "phoneNumber": this.$.phoneNumber.value
+                "phoneNumber":phoneNumber
             };
 
             return address;
