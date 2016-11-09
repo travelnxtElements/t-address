@@ -139,6 +139,20 @@ The `getAddress()` returns the entire address values in one object to use. Which
 
         properties: {
 
+            line1: String,
+
+            line2: String,
+
+            city: String,
+
+            country: String,
+
+            state: String,
+
+            zip: String,
+
+            phoneNumber: String,
+
             /**
              * Flag to hit country API when component is attached to DOM
              * @type {Boolean}
@@ -260,7 +274,7 @@ The `getAddress()` returns the entire address values in one object to use. Which
         },
 
         attached: function () {
-            if (!this.preventAutoPopulate) {
+            if (!this.preventAutoPopulate && !this.countries) {
                 this.pullCountryList();
             }
         },
@@ -339,30 +353,17 @@ The `getAddress()` returns the entire address values in one object to use. Which
          * @return {Object} The address object
          */
         getAddress: function () {
-            var state = '';
-            var stateElement = this.$$('#state');
 
-            if (!this.hasStates)
-                state = stateElement.value;
-            else
-                state = this.state;
-            var phoneNumber='';
-            if(!this.hidePhoneNumber){
-                phoneNumber=this.$$('#phoneNumber').value;
-            }
-          
-
-            var address = {
-                "line1": this.$.line1.value,
-                "line2": this.$.line2.value,
-                "city": this.$.city.value,
-                "state": state,
+            return {
+                "line1": this.line1,
+                "line2": this.line2,
+                "city": this.city,
+                "state": this.state,
                 "country": this.country,
-                "zipCode": this.$.zipCode.value,
-                "phoneNumber":phoneNumber
+                "zipCode": this.zip,
+                "phoneNumber":this.phoneNumber
             };
 
-            return address;
         }
     });
 </script>
