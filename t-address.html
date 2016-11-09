@@ -74,10 +74,10 @@ The `getAddress()` returns the entire address values in one object to use. Which
         </style>
 
         <div class="margin-bottom-medium">
-            <t-input auto-validate label="Address line 1" id="line1" name="line1" error-message="You missed this." required></t-input>
+            <t-input auto-validate label="Address line 1" id="line1" name="line1" value="{{line1}}" error-message="You missed this." required></t-input>
         </div>
         <div class="margin-bottom-medium">
-            <t-input auto-validate id="line2" name="line2" label="Address line 2 (optional)"></t-input>
+            <t-input auto-validate id="line2" name="line2" value="{{line2}}" label="Address line 2 (optional)"></t-input>
         </div>
         <div class="margin-bottom-medium layout horizontal">
             <div class="horizontal-margin flex countryContainer">
@@ -110,20 +110,20 @@ The `getAddress()` returns the entire address values in one object to use. Which
                     
                     </t-dropdown>
                 </template>
-                <t-input label="State / Province" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this."></t-input>
+                <t-input label="State / Province" id="state" name="state" required hidden$="{{hasStates}}" error-message="You missed this." value="{{state}}"></t-input>
             </div>
         </div>
         <div class="margin-bottom-medium layout horizontal">
             <div class="horizontal-margin flex">
-                <t-input auto-validate id="city" name="city" label="City" error-message="Enter city" required ></t-input>
+                <t-input auto-validate id="city" name="city" value="{{city}}" label="City" error-message="Enter city" required ></t-input>
             </div>
             <div class="flex">
-                <t-input id="zipCode" name="zipCode" label="Zip Code" max-length="50" auto-validate error-message="You missed this." required></t-input>
+                <t-input id="zipCode" name="zipCode" value="{{zip}}" label="Zip Code" max-length="50" auto-validate error-message="You missed this." required></t-input>
             </div>
         </div>
         <div class="margin-bottom-medium">
           <template is="dom-if" if=[[!hidePhoneNumber]]>
-            <t-input id="phoneNumber" name="phoneNumber" label="Phone" pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." 
+            <t-input id="phoneNumber" name="phoneNumber" label="Phone" pattern="^[\d, ,(,),+,-]+" max-length="20" error-message="You missed this." value="{{phoneNumber}}"
             required auto-validate></t-input>
           </template>
         </div>
@@ -238,6 +238,16 @@ The `getAddress()` returns the entire address values in one object to use. Which
             },
 
             /**
+             * Pass a State code to pre select a State from the dropdown.
+             * This will only work if a country is preselected and you are trying to select a state respictive to the 
+             * same country.
+             * @type {String}
+             */
+            preselectState: {
+                type: String
+            },
+
+            /**
              * The query parameters to be used while making state and country
              * api calls.
              * @type {String}
@@ -283,10 +293,25 @@ The `getAddress()` returns the entire address values in one object to use. Which
         },
 
         _statesChanged: function () {
-            if (this.states !== null && this.states.result.length > 0)
+            if (this.states !== null && this.states.result.length > 0){
                 this.hasStates = true;
-            else
+            } else{
                 this.hasStates = false;
+            }
+
+            try{
+                if(this._onceStateSelected){
+                    this.state = "";
+                    var select = this.$$('#state-dropdown').querySelector('select');
+                    select.selectedIndex = -1;
+                }
+                if(this.preselectState && !this._onceStateSelected){
+                    this.state = this.preselectState;
+                    this._onceStateSelected = true;
+                }
+            }catch(err){
+                    console.log(err);
+            }
         },
 
         /**
